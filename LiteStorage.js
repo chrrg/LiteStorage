@@ -5,7 +5,7 @@ db=(function(){
 	var db;//当前正在使用的数据库对象
 	var db1={
 		connect:function(ok){//第一次连接,如果无法使用将降级
-			if(!'indexedDB' in window){
+			if(!('indexedDB' in window)){
 				db2.connect(ok);
 				return;
 			}
@@ -92,7 +92,7 @@ db=(function(){
 	
 	var db2={
 		connect:function(ok){
-			if(!'openDatabase' in window){
+			if(!('openDatabase' in window)){
 				db3.connect(ok);
 				return;
 			}
@@ -165,7 +165,7 @@ db=(function(){
 	};//WebSQL对象
 	var db3={
 		connect:function(ok){
-			if(!'localStorage' in window){
+			if(!('localStorage' in window)){
 				//基本不可能发生的，除了浏览器的极端情况
 				console.warn("浏览器不支持本地储存！");
 				return;
