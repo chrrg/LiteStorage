@@ -11,7 +11,7 @@ setItem getItem removeItem iterate clear
 支持存储JSON对象，不支持不可序列化的数据。
 
 # 使用方法：
-
+```javascript
 db.setItem("key","value",function(){
     //设置键值成功
     db.getItem("key",function(value){
@@ -32,5 +32,5 @@ db.setItem("key","value",function(){
         });
     });
 });
-
+```
 性能：比开源库localforage性能提高至少2%，文件大小大大缩减。
