@@ -5,6 +5,7 @@ db=(function(){
 	var db;//当前正在使用的数据库对象
 	var db1={
 		connect:function(ok){//第一次连接,如果无法使用将降级
+			if(!ok)return;
 			if(!('indexedDB' in window)){
 				db2.connect(ok);
 				return;
@@ -55,6 +56,7 @@ db=(function(){
 			var t=this.db.transaction('kv','readwrite');
 			var s=t.objectStore('kv');
 			var r=s.delete(k);
+			if(!fn)return;
 			t.oncomplete = function(){
 				fn(null);
 			};
@@ -62,6 +64,7 @@ db=(function(){
 				fn();
 			};
 		},iterate:function(iterator,callback){
+			if(!iterator)return;
 			var s=this.db.transaction('kv','readonly').objectStore('kv');
 			var r = s.openCursor();
 			r.onsuccess = function () {
@@ -92,6 +95,7 @@ db=(function(){
 	
 	var db2={
 		connect:function(ok){
+			if(!ok)return;
 			if(!('openDatabase' in window)){
 				db3.connect(ok);
 				return;
@@ -139,6 +143,7 @@ db=(function(){
 				});
 			});
 		},iterate:function(iterator,callback){
+			if(!iterator)return;
 			this.db.transaction(function(t){
 				t.executeSql('SELECT * FROM chdb', [], function(t, r) {
 					var rows = r.rows;
@@ -165,6 +170,7 @@ db=(function(){
 	};//WebSQL对象
 	var db3={
 		connect:function(ok){
+			if(!ok)return;
 			if(!('localStorage' in window)){
 				//基本不可能发生的，除了浏览器的极端情况
 				console.warn("浏览器不支持本地储存！");
@@ -182,8 +188,9 @@ db=(function(){
 			fn(JSON.parse(this.db.getItem(k)));
 		},removeItem:function(k,fn){
 			this.db.removeItem(k);
-			fn(null);
+			if(fn)fn(null);
 		},iterate:function(iterator,callback){
+			if(!iterator)return;
 			for (var i = 0; i < this.db.length; i++) {
 				var k = this.db.key(i);
 				if (iterator(k,this.db.getItem(k)) !== void 0){
@@ -194,7 +201,7 @@ db=(function(){
 			if(callback)callback(null);
 		},clear:function(fn){
 			for(var i = this.db.length-1;i>=0;i--)this.db.removeItem(this.db.key(i));
-			fn(null);
+			if(fn)fn(null);
 		}
 	};//LocalStorage对象
 	db=db1;
