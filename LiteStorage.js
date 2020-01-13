@@ -31,6 +31,7 @@ db=(function(){
 				
 			};
 		},setItem:function(k,v,fn){
+			if(v===null)v=void 0;
 			var s=this.db.transaction('kv','readwrite').objectStore('kv');
 			var r=s.put(v,k);
 			if(!fn)return;
